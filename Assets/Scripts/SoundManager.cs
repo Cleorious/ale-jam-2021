@@ -18,6 +18,7 @@ public enum SFX
     Clock,
     Lose,
     Correct,
+    Win,
     Male1,
     Male2,
     Male3,

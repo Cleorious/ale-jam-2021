@@ -11,10 +11,10 @@ public static class Parameter
     public static int CHEF_FACES_COUNT = 6;
 
     public static int INSTRUCTION_MIN_COUNT = 3;
-    public static int INSTRUCTION_MAX_COUNT = 5;
+    public static int INSTRUCTION_MAX_COUNT = 6;
     public static int INSTRUCTION_MAX_TOTAL_PLAYABLE_COUNT = 12;
 
-    public static int TOTAL_LIFE_POINTS = 3;
+    public static int TOTAL_LIFE_POINTS_MINIMUM = 3;
 
     public static float TIMER_BAR_WIDTH_DEFAULT = 1500f;
 

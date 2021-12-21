@@ -22,10 +22,14 @@ public class GameplayPhase : MonoBehaviour
     public List<Image> lifeImages;
     public List<TaskItem> taskItems;
 
+    public Animator correctOverlayAnim;
+    public Animator incorrectOverlayAnim;
+
     [Header("End Game")]
     public Transform rootEndGame;
     public TextMeshProUGUI endGameText;
     public Button nextButton;
+    public Image headChefImage;
     
     GameManager gameManager;
     bool initialized;
@@ -59,8 +63,9 @@ public class GameplayPhase : MonoBehaviour
     public void LoadStage(List<PlayerInstructionsData> playerInstructionsDatas)
     {
         this.playerInstructionsDatas = playerInstructionsDatas;
-        currLifePoints = Parameter.TOTAL_LIFE_POINTS;
+        currLifePoints = Mathf.Max(Parameter.TOTAL_LIFE_POINTS_MINIMUM, playerInstructionsDatas.Count);
         turnCount = 0;
+        totalTurns = 0;
         
         for(int i = 0; i < lifeImages.Count; i++)
         {
@@ -212,7 +217,7 @@ public class GameplayPhase : MonoBehaviour
             //!TODO: end game here
             ShowEndGameScreen(false);
         }
-        
+        incorrectOverlayAnim.SetTrigger("flash");
         
     }
 
@@ -224,10 +229,8 @@ public class GameplayPhase : MonoBehaviour
         rootEndGame.gameObject.SetActive(true);
         string text = isWin ? Parameter.WIN_QUOTES[Random.Range(0, Parameter.WIN_QUOTES.Length)] : Parameter.LOSE_QUOTES[Random.Range(0, Parameter.LOSE_QUOTES.Length)];
         endGameText.SetText(text);
-        if(!isWin)
-        {
-            SoundManager.Instance.PlaySfx(SFX.Lose);
-        }
+        SoundManager.Instance.PlaySfx(isWin ? SFX.Win : SFX.Lose);
+        headChefImage.sprite = gameManager.GetHeadChefSprite(isWin ? ChefState.Normal : ChefState.Angry);
     }
 
     bool CheckTurnDepleted()
@@ -260,6 +263,7 @@ public class GameplayPhase : MonoBehaviour
                 ShowEndGameScreen(true);
                 
             }
+            correctOverlayAnim.SetTrigger("flash");
         }
         else
         {

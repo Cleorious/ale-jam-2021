@@ -24,19 +24,21 @@ public class Instruction
 
 public enum InstructionType
 {
-    Knife,
-    Pan,
-    Stove,
-    Plate,
-    Tomato,
-    Cabbage,
-    Meat,
-    Oil,
-    Blender,
-    Salt,
-    CookingPot,
+    Bowl,
+    Cleaver,
+    Carrot,
+    Cheese,
+    Drumstick,
+    Eggplant,
+    Spork,
     Garlic,
-    
+    Knife,
+    Meat,
+    Milk,
+    Mushroom,
+    Salt,
+    Tomato,
+    Onion,
     
     COUNT
 }
@@ -152,6 +154,23 @@ public class GameManager : MonoBehaviour
         Sprite sprite = spriteAtlas.GetSprite(assetName);
 
         return sprite;
+    }
+
+    public Sprite GetHeadChefSprite(ChefState chefState)
+    {
+        Sprite ret = spriteAtlas.GetSprite("HeadChef_Normal");
+        switch(chefState)
+        {
+            case ChefState.Angry:
+            case ChefState.VeryAngry:
+                ret = spriteAtlas.GetSprite("HeadChef_Angry");
+                break;
+            default:
+                break;
+        }
+
+        return ret;
+
     }
 }
 
