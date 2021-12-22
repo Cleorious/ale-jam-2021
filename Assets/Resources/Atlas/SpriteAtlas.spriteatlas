@@ -48,6 +48,7 @@ SpriteAtlas:
   m_PackedSprites:
   - {fileID: 21300000, guid: 0a472d81f0aac4656a2cfd24a0667b7f, type: 3}
   - {fileID: 21300000, guid: 60ed2bd1b747643a0ba6ca57ca3e8b70, type: 3}
+  - {fileID: 21300000, guid: f6a57fe143f754d5ba1f8f130a4e404e, type: 3}
   - {fileID: 21300000, guid: c2f603d2116184779a702690a12d2061, type: 3}
   - {fileID: 21300000, guid: cd2c72637816c4fbc9df080b391796bd, type: 3}
   - {fileID: 21300000, guid: c82ba9c3b06684ae9b0bf095143b164e, type: 3}
@@ -110,9 +111,11 @@ SpriteAtlas:
   - {fileID: 21300000, guid: a51c9ecee16f7423d930eb6c33d9c4e1, type: 3}
   - {fileID: 21300000, guid: 8c9a89de4f3244fe6a83fc51e2308ac8, type: 3}
   - {fileID: 21300000, guid: 9c3691eeaa26b42bb8b51a2cccd0c258, type: 3}
+  - {fileID: 21300000, guid: dd7eeddf247904f9c87d6bfcc5b159df, type: 3}
   m_PackedSpriteNamesToIndex:
   - ChefFace_2
   - items_2
+  - ArrowRight
   - items_11
   - Button
   - items_9
@@ -175,5 +178,6 @@ SpriteAtlas:
   - BackGroundGameplay
   - items_14
   - white
+  - Background (1)
   m_Tag: SpriteAtlas
   m_IsVariant: 0

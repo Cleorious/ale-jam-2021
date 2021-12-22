@@ -162,7 +162,7 @@ public class GameplayPhase : MonoBehaviour
             {
                 timer -= Time.deltaTime;
                 float currTimerRatio = timer / totalTimer;
-                timerBar.rectTransform.sizeDelta = new Vector2(Mathf.Lerp(0f, Parameter.TIMER_BAR_WIDTH_DEFAULT, currTimerRatio ), 52.1f);
+                timerBar.rectTransform.sizeDelta = new Vector2(Mathf.Lerp(0f, Parameter.TIMER_BAR_WIDTH_DEFAULT, currTimerRatio ), 83f);
     
                 if(timer < 2.5f && !clockPlayed)
                 {
