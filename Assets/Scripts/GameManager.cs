@@ -53,9 +53,14 @@ public class GameManager : MonoBehaviour
     public SpriteAtlas spriteAtlas;
 
     bool initialized;
+    
+    
+    //!gameplay data stuff
+    public int currStage;
     List<PlayerInstructionsData> playerInstructionsDatas;
     [HideInInspector]
     public List<InstructionType> playableInstructionTypes;
+    int currPlayerCount;
 
     
     void Start()
@@ -84,31 +89,54 @@ public class GameManager : MonoBehaviour
         mainMenu.root.gameObject.SetActive(true);
     }
 
-    public void PlayGame(int playerCount)
+    public List<InstructionType> GeneratePlayableInstructions()
     {
-        int totalInstructionCount = (int)InstructionType.COUNT;
+        List<InstructionType> ret = new List<InstructionType>();
         
-        playableInstructionTypes = new List<InstructionType>();
+        int totalInstructionCount = (int)InstructionType.COUNT;
         for(int j = 0; j < Parameter.INSTRUCTION_MAX_TOTAL_PLAYABLE_COUNT; j++)
         {
             InstructionType instructionType = (InstructionType)Random.Range(0, (int)InstructionType.COUNT);
             
-            while(playableInstructionTypes.Contains(instructionType))
+            while(ret.Contains(instructionType))
             {
-                instructionType = (InstructionType)Random.Range(0, (int)InstructionType.COUNT);
+                instructionType = (InstructionType)Random.Range(0, totalInstructionCount);
             }
             
-            playableInstructionTypes.Add(instructionType);
+            ret.Add(instructionType);
+        }
+
+        return ret;
+    }
+
+    public List<PlayerInstructionsData> GeneratePlayerInstructions(int playerCount)
+    {
+        float difficultyRatio = GetDifficultyRatio();
+        int minInstructions;
+        int maxInstructions;
+        if(difficultyRatio < 0.3f)
+        {
+            minInstructions = Parameter.INSTRUCTION_MIN_COUNT_EASY;
+            maxInstructions = Parameter.INSTRUCTION_MAX_COUNT_EASY;
+        }
+        else if (difficultyRatio < 0.8f)
+        {
+            minInstructions = Parameter.INSTRUCTION_MIN_COUNT_MEDIUM;
+            maxInstructions = Parameter.INSTRUCTION_MAX_COUNT_MEDIUM;
+        }
+        else
+        {
+            minInstructions = Parameter.INSTRUCTION_MIN_COUNT_HARD;
+            maxInstructions = Parameter.INSTRUCTION_MAX_COUNT_HARD;
         }
         
-        
-        playerInstructionsDatas = new List<PlayerInstructionsData>();
+        List<PlayerInstructionsData> ret = new List<PlayerInstructionsData>();
         List<int> assignedChefIds = new List<int>();
         for(int i = 0; i < playerCount; i++)
         {
             PlayerInstructionsData playerInstructionsData = new PlayerInstructionsData();
             playerInstructionsData.instructions = new List<Instruction>();
-            int instructionCount = Random.Range(Parameter.INSTRUCTION_MIN_COUNT, Parameter.INSTRUCTION_MAX_COUNT);
+            int instructionCount = Random.Range(minInstructions, maxInstructions);
             for(int j = 0; j < instructionCount; j++)
             {
                 InstructionType instructionType = (InstructionType)Random.Range(0, (int)InstructionType.COUNT);
@@ -127,8 +155,36 @@ public class GameManager : MonoBehaviour
             }
             
             assignedChefIds.Add(playerInstructionsData.chefId);
-            playerInstructionsDatas.Add(playerInstructionsData);
+            ret.Add(playerInstructionsData);
         }
+
+        return ret;
+    }
+
+    public float GetDifficultyRatio()
+    {
+        float ret = currStage / 5f;
+
+        return ret;
+    }
+
+    public void PlayGame(int playerCount)
+    {
+        currStage = 1;
+        currPlayerCount = playerCount;
+        
+        playableInstructionTypes = GeneratePlayableInstructions();
+        playerInstructionsDatas = GeneratePlayerInstructions(currPlayerCount);
+
+        instructionsPhase.LoadInstructions(playerInstructionsDatas);
+    }
+
+    public void NextStage()
+    {
+        currStage++;
+        
+        playableInstructionTypes = GeneratePlayableInstructions();
+        playerInstructionsDatas = GeneratePlayerInstructions(currPlayerCount);
 
         instructionsPhase.LoadInstructions(playerInstructionsDatas);
     }

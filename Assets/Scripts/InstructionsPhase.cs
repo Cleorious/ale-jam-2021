@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -7,6 +6,7 @@ public class InstructionsPhase : MonoBehaviour
 {
     public Transform root;
     public TextMeshProUGUI timerText;
+    public TextMeshProUGUI stageText;
 
     public Transform uiItemsContainer;
     public List<PlayerInstructionsItem> playerInstructionsItems;
@@ -60,8 +60,23 @@ public class InstructionsPhase : MonoBehaviour
         }
 
         isShowing = true;
-        timer = Parameter.TIME_LIMIT_INSTRUCTIONS_PHASE;
+
+        float difficultyRatio = gameManager.GetDifficultyRatio();
+        if(difficultyRatio < 0.3f)
+        {
+            timer = Parameter.TIME_LIMIT_INSTRUCTIONS_PHASE_EASY;
+        }
+        else if (difficultyRatio < 0.8f)
+        {
+            timer = Parameter.TIME_LIMIT_INSTRUCTIONS_PHASE_MEDIUM;
+        }
+        else
+        {
+            timer = Parameter.TIME_LIMIT_INSTRUCTIONS_PHASE_HARD;
+        }
+        
         timerText.SetText(Mathf.RoundToInt(timer).ToString());
+        stageText.SetText("Stage " + gameManager.currStage);
         root.gameObject.SetActive(true);
         SoundManager.Instance.PlayBGM(BGM.Instructions);
     }

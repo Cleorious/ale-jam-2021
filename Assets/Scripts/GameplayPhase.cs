@@ -25,10 +25,14 @@ public class GameplayPhase : MonoBehaviour
     public Animator correctOverlayAnim;
     public Animator incorrectOverlayAnim;
 
+    public TextMeshProUGUI currStageText;
+
     [Header("End Game")]
     public Transform rootEndGame;
     public TextMeshProUGUI endGameText;
+    public TextMeshProUGUI endGameStageText;
     public Button nextButton;
+    public TextMeshProUGUI nextButtonText;
     public Image headChefImage;
     
     GameManager gameManager;
@@ -46,6 +50,10 @@ public class GameplayPhase : MonoBehaviour
     float totalTimer;
     ChefState currChefState;
 
+    [Header("End Game Colours")]
+    public Color winTextCol;
+    public Color loseTextCol;
+
     public void Init(GameManager gameManager)
     {
         this.gameManager = gameManager;
@@ -55,7 +63,7 @@ public class GameplayPhase : MonoBehaviour
         }
 
         root.gameObject.SetActive(false);
-        nextButton.onClick.AddListener(OnNextButtonPressed);
+        nextButton.onClick.AddListener(ReturnToMainMenu);
 
         initialized = true;
     }
@@ -66,6 +74,7 @@ public class GameplayPhase : MonoBehaviour
         currLifePoints = Mathf.Max(Parameter.TOTAL_LIFE_POINTS_MINIMUM, playerInstructionsDatas.Count);
         turnCount = 0;
         totalTurns = 0;
+        currStageText.SetText("Stage " + gameManager.currStage);
         
         for(int i = 0; i < lifeImages.Count; i++)
         {
@@ -111,7 +120,23 @@ public class GameplayPhase : MonoBehaviour
         PlayerInstructionsData instructionsData = playerInstructionsDatas[currPlayerIndex];
         currChefImage.sprite = gameManager.GetChefSprite(instructionsData.chefId);
         float ratio = Mathf.Min(((float)turnCount + 3f) / totalTurns, 1f);
-        totalTimer = Mathf.Lerp(Parameter.TIME_LIMIT_SINGLE_TASK_MAX, Parameter.TIME_LIMIT_SINGLE_TASK_MIN, ratio);
+        float baseTimer;
+        
+        float difficultyRatio = gameManager.GetDifficultyRatio();
+        if(difficultyRatio < 0.3f)
+        {
+            baseTimer = Parameter.TIME_LIMIT_SINGLE_TASK_MAX_EASY;
+        }
+        else if (difficultyRatio < 0.8f)
+        {
+            baseTimer = Parameter.TIME_LIMIT_SINGLE_TASK_MAX_MEDIUM;
+        }
+        else
+        {
+            baseTimer = Parameter.TIME_LIMIT_SINGLE_TASK_MAX_HARD;
+        }
+        
+        totalTimer = Mathf.Lerp(baseTimer, Parameter.TIME_LIMIT_SINGLE_TASK_MIN, ratio);
         timer = totalTimer;
         clockPlayed = false;
         
@@ -225,12 +250,28 @@ public class GameplayPhase : MonoBehaviour
 
     public void ShowEndGameScreen(bool isWin)
     {
+        
         SoundManager.Instance.StopAllBGM();
         rootEndGame.gameObject.SetActive(true);
         string text = isWin ? Parameter.WIN_QUOTES[Random.Range(0, Parameter.WIN_QUOTES.Length)] : Parameter.LOSE_QUOTES[Random.Range(0, Parameter.LOSE_QUOTES.Length)];
         endGameText.SetText(text);
+        string winText = isWin ? "CLEARED!" : "FAILED!";
+        endGameStageText.SetText("Stage " + winText);
+        nextButtonText.SetText(isWin ? "Next" : "Return");
+
+        endGameStageText.color = isWin ? winTextCol : loseTextCol;
         SoundManager.Instance.PlaySfx(isWin ? SFX.Win : SFX.Lose);
         headChefImage.sprite = gameManager.GetHeadChefSprite(isWin ? ChefState.Normal : ChefState.Angry);
+        
+        nextButton.onClick.RemoveAllListeners();
+        if(isWin)
+        {
+            nextButton.onClick.AddListener(GoToNextRound);
+        }
+        else
+        {
+            nextButton.onClick.AddListener(ReturnToMainMenu);
+        }
     }
 
     bool CheckTurnDepleted()
@@ -249,6 +290,7 @@ public class GameplayPhase : MonoBehaviour
         {
             //!TODO: show correct visuals here
             bool turnDepleted = CheckTurnDepleted();
+            turnDepleted = true;
             if(!turnDepleted)
             {
                 SoundManager.Instance.PlaySfx(SFX.Correct);
@@ -271,10 +313,17 @@ public class GameplayPhase : MonoBehaviour
         }
     }
 
-    public void OnNextButtonPressed()
+    public void ReturnToMainMenu()
     {
         root.gameObject.SetActive(false);
         rootEndGame.gameObject.SetActive(false);
         gameManager.ShowMainMenu();
+    }
+    
+    public void GoToNextRound()
+    {
+        root.gameObject.SetActive(false);
+        rootEndGame.gameObject.SetActive(false);
+        gameManager.NextStage();
     }
 }

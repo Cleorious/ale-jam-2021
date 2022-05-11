@@ -49,6 +49,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 0a472d81f0aac4656a2cfd24a0667b7f, type: 3}
   - {fileID: 21300000, guid: 60ed2bd1b747643a0ba6ca57ca3e8b70, type: 3}
   - {fileID: 21300000, guid: f6a57fe143f754d5ba1f8f130a4e404e, type: 3}
+  - {fileID: 21300000, guid: a931e492b013b4271a232ec98a0cfea3, type: 3}
   - {fileID: 21300000, guid: c2f603d2116184779a702690a12d2061, type: 3}
   - {fileID: 21300000, guid: cd2c72637816c4fbc9df080b391796bd, type: 3}
   - {fileID: 21300000, guid: c82ba9c3b06684ae9b0bf095143b164e, type: 3}
@@ -59,6 +60,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 4502f7b56b6184863bf0c027a25f4f79, type: 3}
   - {fileID: 21300000, guid: 86ca2616bb8cf4e8e8d307c575fc7f39, type: 3}
   - {fileID: 21300000, guid: b28917262dafe4a9ea75d3d97b83b8a0, type: 3}
+  - {fileID: 21300000, guid: 3e858027c77644c148fa99d18c7a908d, type: 3}
   - {fileID: 21300000, guid: 7d59b418a20554aadbf041a9cadec7d9, type: 3}
   - {fileID: 21300000, guid: 59b48a1819373474db24e12b04090063, type: 3}
   - {fileID: 21300000, guid: 66ef0bb8bd94d4eec801e3ff95a9e32b, type: 3}
@@ -116,6 +118,7 @@ SpriteAtlas:
   - ChefFace_2
   - items_2
   - ArrowRight
+  - AppIcon
   - items_11
   - Button
   - items_9
@@ -126,6 +129,7 @@ SpriteAtlas:
   - Plate
   - BackGroundGameplaybw
   - items_0
+  - AppIcon2
   - items_8
   - ChefFace_5
   - ChefFace_0
